@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Covid Data</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #1c1c1c;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        #container {
+            text-align: center;
+            background: #292929;
+            padding: 30px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            max-width: 90%;
+            margin: 0 10px;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        #cityName {
+            padding: 12px;
+            margin-bottom: 15px;
+            width: 80%;
+            max-width: 400px;
+            border: none;
+            border-radius: 5px;
+            background: #3d3d3d;
+            color: #e0e0e0;
+            font-size: 16px;
+            outline: none;
+            transition: background 0.3s ease;
+        }
+        #cityName:focus {
+            background: #505050;
+        }
+        #getData {
+            padding: 12px 25px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+        #getData:hover {
+            background: #0056b3;
+            transform: scale(1.05);
+        }
+        #result {
+            margin-top: 25px;
+            padding: 20px;
+            background: #333;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            max-width: 90%;
+            word-wrap: break-word;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+<div id="container">
+    <h1>Covid Data</h1>
+    <input type="text" id="cityName" placeholder="Enter city name">
+    <button id="getData">Get Data</button>
+    <div id="result"></div>
+</div>
+
+<script>
+    document.getElementById('getData').addEventListener('click', function() {
+        const cityName = document.getElementById('cityName').value;
+        if (cityName) {
+            fetch(`http://localhost:8080/covid-data/citywise/${cityName}`)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('result').innerHTML = `<strong>${data}</strong>`;
+                })
+                .catch(error => {
+                    document.getElementById('result').innerHTML = `<strong>Error fetching data:</strong> ${error}`;
+                });
+        } else {
+            document.getElementById('result').innerHTML = '<strong>Please enter a city name</strong>';
+        }
+    });
+</script>
+</body>
+</html>
